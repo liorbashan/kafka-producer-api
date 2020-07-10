@@ -1,0 +1,14 @@
+version: "3.2"
+services: 
+  producer:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:3000
+    environment: 
+      KAFKA_HOST: "kafka-dev.888holdings.corp:9101,kafka-dev.888holdings.corp:9102kafka-dev.888holdings.corp:9103"
+      KAFKA_SASL_MECHANISM: "plain"
+      KAFKA_SASL_USER: "admin"
+      KAFKA_SASL_PASSWORD: "test1234"
+      KAFKA_SSL_CERT_LOCATION: "assets/client.truststore.jks"

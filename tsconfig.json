@@ -1,0 +1,25 @@
+{
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+        "target": "es2016",
+        "module": "commonjs",
+        "lib": [
+          "es2016",
+          "esnext.asynciterable",
+          "dom"
+        ],
+        "sourceMap": true,
+        "outDir": "dist",
+        "types": [
+          "reflect-metadata",
+          "node"
+        ],
+        "strict": true,
+        "noImplicitAny": false,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+    }
+}
