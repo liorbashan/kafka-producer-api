@@ -1,14 +1,44 @@
-version: "3.2"
+version: "3.7"
 services: 
-  producer:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    ports: 
-      - 3000:3000
-    environment: 
-      KAFKA_HOST: "kafka-dev.888holdings.corp:9101,kafka-dev.888holdings.corp:9102kafka-dev.888holdings.corp:9103"
-      KAFKA_SASL_MECHANISM: "plain"
-      KAFKA_SASL_USER: "admin"
-      KAFKA_SASL_PASSWORD: "test1234"
-      KAFKA_SSL_CERT_LOCATION: "assets/client.truststore.jks"
+  # api:
+  #   container_name: api
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports: 
+  #     - 3000:3000
+  #   environment: 
+  #     KAFKA_HOST: kafka:9092
+  #     KAFKA_SASL_MECHANISM: "PLAIN"
+  #     KAFKA_SECURE_CONNECTION: "false"
+  #     KAFKA_SASL_USER: "xxxx"
+  #     KAFKA_SASL_PASSWORD: "yyyy"
+  #     KAFKA_SSL_CERT_LOCATION: "assets/client.truststore.jks"
+  #   depends_on:
+  #     - kafka
+  
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper
+    ports:
+      - "32181:32181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+    
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    ports:
+      - "9094:9094"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
+      KAFKA_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://kafka:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      ES_JAVA_OPTS: "-Xms512m -Xmx3000m"
+    depends_on:
+      - zookeeper

@@ -13,23 +13,31 @@ export class KafkaService {
     constructor() {
         const kafkaHost = process.env.KAFKA_HOST || '';
         const sslMechanism = process.env.KAFKA_SASL_MECHANISM || '';
-        const sslUser = process.env.KAFKA_SASL_USER || '';
-        const sslPass = process.env.KAFKA_SASL_PASSWORD || '';
-        const sslLocation = path.join(baseDir, process.env.KAFKA_SSL_CERT_LOCATION as string);
-
-        const config: KafkaConfig = {
-            kafkaHost,
-            sasl: {
-                mechanism: sslMechanism,
-                password: sslPass,
-                username: sslUser,
-            },
-            sslOptions: {
-                rejectUnauthorized: false,
-                ca: [fs.readFileSync(sslLocation, 'utf-8')],
-            },
-        };
-        console.log('Kafka Settings: ', { host: kafkaHost, mechanism: sslMechanism, sslUser, sslPass, sslLocation });
+        const secureConnection = process.env.KAFKA_SECURE_CONNECTION;
+        let sslUser = '';
+        let sslPass = '';
+        let sslLocation = '';
+        let config: any | KafkaConfig = null;
+        if (secureConnection === 'true') {
+            sslUser = process.env.KAFKA_SASL_USER || '';
+            sslPass = process.env.KAFKA_SASL_PASSWORD || '';
+            // sslLocation = path.join(baseDir, process.env.KAFKA_SSL_CERT_LOCATION as string);
+            config = {
+                kafkaHost,
+            };
+            // console.log('Kafka Settings: ', { host: kafkaHost, mechanism: sslMechanism, sslUser, sslPass, sslLocation });
+        } else {
+            config = {
+                kafkaHost,
+                sslOptions: {
+                    rejectUnauthorized: false,
+                },
+                sasl: {
+                    mechanism: 'plain',
+                },
+            };
+        }
+        console.log('kafka config', config);
         const Producer = kafka.Producer;
         const client = new kafka.KafkaClient(config);
         this._producer = new Producer(client);
@@ -37,7 +45,7 @@ export class KafkaService {
             console.log('Kafka Connection Success');
         });
         this._producer.on('error', (error) => {
-            console.log(error);
+            console.log('Kafka Connection Error', error);
             throw error;
         });
     }

@@ -1,5 +1,5 @@
 {
-    "name": "upper-funnel-generic-kafka-producer",
+    "name": "kafka-api",
     "version": "1.0.0",
     "description": "",
     "main": "dist/app.js",
@@ -19,9 +19,9 @@
     "devDependencies": {
         "@types/body-parser": "^1.19.0",
         "@types/express": "^4.17.6",
-        "@types/node": "^14.0.1",
-        "typescript": "^3.9.2",
-        "nodemon": "^2.0.4"
+        "@types/node": "^14.0.22",
+        "nodemon": "^2.0.4",
+        "typescript": "^3.9.2"
     },
     "dependencies": {
         "body-parser": "^1.19.0",

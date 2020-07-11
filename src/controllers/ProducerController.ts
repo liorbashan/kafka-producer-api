@@ -2,7 +2,7 @@ import { KafkaMessage } from './../types/KafkaMessage';
 import { KafkaService } from './../services/KafkaService';
 import { JsonController, Post, Body, BadRequestError } from 'routing-controllers';
 
-@JsonController('/producer')
+@JsonController('/api')
 export class ProducerController {
     constructor(private _kafkaService: KafkaService) {}
 
