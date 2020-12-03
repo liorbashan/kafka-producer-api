@@ -1,13 +1,11 @@
-import { baseDir } from './../app';
-import { KafkaMessage, KafkaResponse } from './../types/KafkaMessage';
-import { KafkaConfig } from './../types/KafkaConfig';
+import { IKafkaProducerService } from '../interfaces/IKafkaProducerService';
+import { KafkaMessage, KafkaResponse } from '../types/KafkaMessage';
+import { KafkaConfig } from '../types/KafkaConfig';
 import { Service } from 'typedi';
 import kafka from 'kafka-node';
-import fs from 'fs';
-import path from 'path';
 
 @Service()
-export class KafkaService {
+export class KafkaProducerService implements IKafkaProducerService {
     public _kafkaConfig: any;
     public _producer: kafka.Producer;
     constructor() {

@@ -1,15 +1,20 @@
+import { IKafkaProducerService } from './../interfaces/IKafkaProducerService';
+import { Container } from 'typedi';
 import { KafkaMessage } from './../types/KafkaMessage';
-import { KafkaService } from './../services/KafkaService';
 import { JsonController, Post, Body, BadRequestError } from 'routing-controllers';
 
 @JsonController('/api')
 export class ProducerController {
-    constructor(private _kafkaService: KafkaService) {}
+    constructor(private _kafkaProducer: IKafkaProducerService) {
+        if (!this._kafkaProducer) {
+            this._kafkaProducer = Container.get('KafkaService');
+        }
+    }
 
     @Post('/produce-message')
     public async produce(@Body() payload: KafkaMessage): Promise<any> {
         const validRequest: KafkaMessage = this.validateRequest(payload);
-        const response: any = await this._kafkaService.sendMessageToTopic(validRequest);
+        const response: any = await this._kafkaProducer.sendMessageToTopic(validRequest);
         return response ? response : 'Error in parsing response';
     }
 
