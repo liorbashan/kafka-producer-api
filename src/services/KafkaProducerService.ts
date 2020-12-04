@@ -15,10 +15,10 @@ export class KafkaProducerService implements IKafkaProducerService {
         const Producer = kafka.Producer;
         this._producer = new Producer(kafkaclient);
         this._producer.on('ready', async () => {
-            console.log('Kafka Connection Success');
+            console.log('Producer Connected');
         });
         this._producer.on('error', (error) => {
-            console.log('Kafka Connection Error', error);
+            console.log('Producer Error', error);
             // this._producer.close();
             throw error;
         });
@@ -112,7 +112,7 @@ export class KafkaProducerService implements IKafkaProducerService {
                 kafkaHost,
             };
         }
-        console.log('kafka config', config);
+        console.log('Producer Client', config);
         const client = new kafka.KafkaClient(config);
         return client;
     }

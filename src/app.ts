@@ -1,3 +1,4 @@
+import { IKafkaConsumerService } from './interfaces/IKafkaConsumerService';
 import { KafkaProducerService } from './services/KafkaProducerService';
 import 'reflect-metadata';
 import { createExpressServer, useContainer } from 'routing-controllers';
@@ -15,6 +16,12 @@ export const baseDir = __dirname;
     // Reister Services
     await ServiceProvider.createServiceContainers();
 
+    const consumerEnabledMode: boolean = (process.env.CONSUMER_ENABLED as string) === 'true' ? true : false;
+    console.log('Consumer Enabled: ', consumerEnabledMode);
+    if (consumerEnabledMode) {
+        const consumerService: IKafkaConsumerService = Container.get('KafkaConsumerService');
+        consumerService.startConsuming();
+    }
     const port: number = Number(process.env.PORT) || 3000;
     app.listen(port, () => {
         console.log(`listening on port ${port}`);
