@@ -27,12 +27,6 @@ export class KafkaProducerService implements IKafkaProducerService {
         } else {
             config = {
                 kafkaHost,
-                sslOptions: {
-                    rejectUnauthorized: false,
-                },
-                sasl: {
-                    mechanism: 'plain',
-                },
             };
         }
         console.log('kafka config', config);
