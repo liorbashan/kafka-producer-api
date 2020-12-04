@@ -4,6 +4,6 @@ import Container from 'typedi';
 
 export async function createServiceContainers(): Promise<void> {
     // KafkaProducer:
-    const kafkaService: IKafkaProducerService = new KafkaProducerService();
-    Container.set('KafkaService', kafkaService);
+    const kafkaProducerService: IKafkaProducerService = new KafkaProducerService();
+    Container.set('KafkaProducerService', kafkaProducerService);
 }

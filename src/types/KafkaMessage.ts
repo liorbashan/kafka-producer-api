@@ -4,9 +4,14 @@ export type KafkaMessage = {
     key?: string;
     partition?: number;
 };
-
-export type KafkaResponse = {
-    topicName: string;
-    partition: number;
-    cursorPosition: number;
+export type KafkaCreateTopicRequest = {
+    topic: string;
+    retention: number;
+    messages: string;
 };
+
+export class KafkaResponse {
+    public topicName?: string;
+    public partition?: number;
+    public cursorPosition?: number;
+}
