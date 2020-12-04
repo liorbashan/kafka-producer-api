@@ -3,6 +3,8 @@ import { KafkaMessage, KafkaResponse } from '../types/KafkaMessage';
 import { KafkaConfig } from '../types/KafkaConfig';
 import { Service } from 'typedi';
 import kafka from 'kafka-node';
+import path from 'path';
+import { baseDir } from '../app';
 
 @Service()
 export class KafkaProducerService implements IKafkaProducerService {
@@ -19,9 +21,18 @@ export class KafkaProducerService implements IKafkaProducerService {
         if (secureConnection === 'true') {
             sslUser = process.env.KAFKA_SASL_USER || '';
             sslPass = process.env.KAFKA_SASL_PASSWORD || '';
-            // sslLocation = path.join(baseDir, process.env.KAFKA_SSL_CERT_LOCATION as string);
+            sslLocation = path.join(baseDir, process.env.KAFKA_SSL_CERT_LOCATION as string);
             config = {
                 kafkaHost,
+                sslUser,
+                sslPass,
+                sslLocation,
+                sslOptions: {
+                    rejectUnauthorized: false,
+                },
+                sasl: {
+                    mechanism: sslMechanism,
+                },
             };
             // console.log('Kafka Settings: ', { host: kafkaHost, mechanism: sslMechanism, sslUser, sslPass, sslLocation });
         } else {
