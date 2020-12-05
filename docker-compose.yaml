@@ -32,6 +32,7 @@ services:
       dockerfile: Dockerfile
     ports: 
       - 3000:3000
+      - 6969:6969
     environment: 
       CONSUMER_ENABLED: "true"
       CONSUMER_AUTOCOMMIT: "true"
