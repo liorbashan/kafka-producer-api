@@ -1,5 +1,4 @@
 import { IKafkaConsumerService } from './interfaces/IKafkaConsumerService';
-import { KafkaProducerService } from './services/KafkaProducerService';
 import 'reflect-metadata';
 import { createExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
@@ -22,6 +21,7 @@ export const baseDir = __dirname;
         const consumerService: IKafkaConsumerService = Container.get('KafkaConsumerService');
         consumerService.startConsuming();
     }
+
     const port: number = Number(process.env.PORT) || 3000;
     app.listen(port, () => {
         console.log(`listening on port ${port}`);

@@ -1,3 +1,4 @@
+import { WebSocketServer } from './WebSocketServer';
 import { KafkaCreateTopicRequest } from './../types/KafkaMessage';
 import { IKafkaProducerService } from './../interfaces/IKafkaProducerService';
 import { IKafkaConsumerService } from '../interfaces/IKafkaConsumerService';
@@ -13,7 +14,9 @@ export class KafkaConsumerService implements IKafkaConsumerService {
     public _ofr!: OffsetFetchRequest;
     private _consumerConfig!: ConsumerOptions;
     private restart: boolean = false;
+    private wss: WebSocketServer;
     constructor() {
+        this.wss = Container.get('WebSocketServer');
         this.initConsumer();
     }
 
@@ -24,7 +27,11 @@ export class KafkaConsumerService implements IKafkaConsumerService {
         }
         console.log('Consuming Starting');
         this._consumer.on('message', (message) => {
-            // process message
+            // process message:
+            this.wss.wss.clients.forEach((c) => {
+                const client = c;
+                c.send(`kafka message that was consumed: ${message}`);
+            });
             // commit offset (if auto commit is off)
             console.log(message);
         });
