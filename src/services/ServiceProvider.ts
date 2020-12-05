@@ -6,15 +6,12 @@ import { IKafkaProducerService } from '../interfaces/IKafkaProducerService';
 import Container from 'typedi';
 
 export async function createServiceContainers(): Promise<void> {
-    // WebSocket Server:
-    const wss: WebSocketServer = new WebSocketServer(6969);
-    Container.set('WebSocketServer', wss);
-
     // KafkaProducer:
     const kafkaProducerService: IKafkaProducerService = new KafkaProducerService();
     Container.set('KafkaProducerService', kafkaProducerService);
 
     // KafkaConsumer:
-    const kafkaConsumerService: IKafkaConsumerService = new KafkaConsumerService();
+    const wss: WebSocketServer = new WebSocketServer(6969);
+    const kafkaConsumerService: IKafkaConsumerService = new KafkaConsumerService(wss);
     Container.set('KafkaConsumerService', kafkaConsumerService);
 }
