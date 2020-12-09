@@ -3,15 +3,28 @@ import 'reflect-metadata';
 import { createExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import * as ServiceProvider from './services/ServiceProvider';
+import express from 'express';
+import path from 'path';
+import { useExpressServer } from 'routing-controllers';
 
 export const baseDir = __dirname;
 
 (async () => {
     useContainer(Container);
-    const app = createExpressServer({
+    const app = express();
+    // const app = createExpressServer({
+    //     controllers: [baseDir + '//controllers/*{.js,.ts}'],
+    //     // middlewares: [baseDir + "/modules/**/middlewares/*{.js,.ts}"]
+    // });
+    useExpressServer(app, {
+        // register created express server in routing-controllers
         controllers: [baseDir + '//controllers/*{.js,.ts}'],
-        // middlewares: [baseDir + "/modules/**/middlewares/*{.js,.ts}"]
     });
+    app.use(express.static(path.join(baseDir, 'public')));
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(baseDir, 'public', 'websocket-test.html'));
+    });
+
     // Reister Services
     await ServiceProvider.createServiceContainers();
 

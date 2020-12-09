@@ -4,11 +4,21 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
+        <style>
+            textarea {
+                width: 100%;
+                min-height: 30rem;
+                font-family: monospace;
+                font-size: 1rem;
+                line-height: 1.2;
+            }
+        </style>
     </head>
     <body>
         <h1>Real Time Messaging</h1>
         <pre id="messages" style="height: 400px; overflow: scroll"></pre>
-        <input type="text" id="messageBox" placeholder="Type your message here" style="display: block; width: 100%; margin-bottom: 10px; padding: 10px" />
+        <!-- <input type="text" id="messageBox" placeholder="Type your message here" style="display: block; width: 100%; margin-bottom: 10px; padding: 10px" /> -->
+        <textarea name="" id="myTextarea" cols="30" rows="10"></textarea>
         <button id="send" title="Send Message!" style="width: 100%; height: 30px">Send Message</button>
 
         <script>
@@ -16,7 +26,7 @@
                 const sendBtn = document.querySelector('#send');
                 const messages = document.querySelector('#messages');
                 const messageBox = document.querySelector('#messageBox');
-
+                const textArea = document.querySelector('#myTextarea');
                 let ws;
 
                 function showMessage(message) {
@@ -41,14 +51,24 @@
                     };
                 }
 
-                sendBtn.onclick = function () {
-                    if (!ws) {
-                        showMessage('No WebSocket connection :(');
-                        return;
+                textArea.onkeyup = function() {
+                    try {
+                        const input = textArea.value ;
+                        textAsJson = JSON.parse(input);
+                        var textedJson = JSON.stringify(textAsJson, undefined, 2);
+                        textArea.value  = textedJson;
+                    } catch (error) {
+                        console.log(error);
                     }
+                };
 
-                    ws.send(messageBox.value);
-                    showMessage(messageBox.value);
+                sendBtn.onclick = function () {
+                    // if (!ws) {
+                    //     showMessage('No WebSocket connection :(');
+                    //     return;
+                    // }
+                    // ws.send(messageBox.value);
+                    // showMessage(messageBox.value);
                 };
 
                 init();

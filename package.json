@@ -6,13 +6,14 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build:assets": "npm run clean && tsc && npm run assets",
-        "build": "npm run clean && tsc",
-        "assets": "copy -a ./src/assets ./dist/",
+        "build": "npm run clean && tsc && npm run public",
+        "assets": "cp -a ./src/assets ./dist/",
         "clean": "rm -rf ./dist",
         "serve": "node ./dist/app.js",
         "start": "npm run serve",
         "build:tsc": "tsc",
-        "dev": "nodemon dist/app.js"
+        "dev": "nodemon dist/app.js",
+        "public": "cp -a ./src/public ./dist/"
     },
     "keywords": [],
     "author": "",
