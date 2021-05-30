@@ -34,6 +34,6 @@
         "reflect-metadata": "^0.1.13",
         "routing-controllers": "^0.8.1",
         "typedi": "^0.8.0",
-        "ws": "~7.4.1"
+        "ws": "~7.4.6"
     }
 }
